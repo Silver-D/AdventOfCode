@@ -21,6 +21,9 @@ namespace AdventOfCode
         {
             input = GetInput(year, day);
 
+            if (input.Length == 0)
+            return;
+
             exersizeClass = Type.GetType("AdventOfCode.Exersize_" + year + "_" + day);
 
             exersizeClass.GetMethod("ParseInput").Invoke(null, new object[] { input });
@@ -28,7 +31,10 @@ namespace AdventOfCode
 
         public static string Run(int part)
         {
-             return exersizeClass.GetMethod("Part_" + part).Invoke(null, new object[] { }).ToString();
+            if (input.Length == 0)
+            return "";
+
+            return exersizeClass.GetMethod("Part_" + part).Invoke(null, new object[] { }).ToString();
         }
 
         private static string GetInput(string year, string day)
@@ -75,7 +81,7 @@ namespace AdventOfCode
 
             while(true)
             {
-                HttpRequestMessage request   = new HttpRequestMessage(HttpMethod.Get, "https://adventofcode.com/" + year + "/day/" + day + "/input");
+                HttpRequestMessage  request  = new HttpRequestMessage(HttpMethod.Get, "https://adventofcode.com/" + year + "/day/" + day + "/input");
                 HttpResponseMessage response = null;
 
                 if (session_id.Length > 0)
