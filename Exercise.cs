@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace AdventOfCode
 {
-    abstract class Exersize
+    abstract class Exercise
     {
         public string    year;
         public string    day;
         public byte      part;
         protected string input;
 
-        public Exersize(string year, string day, byte part)
+        public Exercise(string year, string day, byte part)
         {
             this.year = year;
             this.day  = day;

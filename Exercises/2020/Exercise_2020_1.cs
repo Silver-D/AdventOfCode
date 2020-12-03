@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace AdventOfCode
 {
-    class Exersize_2020_1 : Exersize
+    class Exercise_2020_1 : Exercise
     {
-        private static string[] data;
+        private string[] data;
 
-        public Exersize_2020_1(byte part) : base("2020", "1", part)
+        public Exercise_2020_1(byte part) : base("2020", "1", part)
         {
             ParseInput();
         }
