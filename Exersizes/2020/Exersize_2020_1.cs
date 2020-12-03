@@ -43,7 +43,7 @@ namespace AdventOfCode
                     if (numbers[a] + numbers[b] > needed)
                     continue;
 
-                    for (int c = b + 2; c < numbers.Length; c++)
+                    for (int c = b + 1; c < numbers.Length; c++)
                     {
                         if (numbers[a] + numbers[b] + numbers[c] == needed)
                         return (numbers[a] * numbers[b] * numbers[c]).ToString();
