@@ -38,12 +38,12 @@ namespace AdventOfCode
 
             for (int a = 0; a < numbers.Length; a++)
             {
-                for (int b = a; b < numbers.Length; b++)
+                for (int b = a + 1; b < numbers.Length; b++)
                 {
                     if (numbers[a] + numbers[b] > needed)
                     continue;
 
-                    for (int c = b; c < numbers.Length; c++)
+                    for (int c = b + 2; c < numbers.Length; c++)
                     {
                         if (numbers[a] + numbers[b] + numbers[c] == needed)
                         return (numbers[a] * numbers[b] * numbers[c]).ToString();
