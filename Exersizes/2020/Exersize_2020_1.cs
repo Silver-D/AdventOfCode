@@ -3,16 +3,21 @@ using System.Linq;
 
 namespace AdventOfCode
 {
-    static class Exersize_2020_1
+    class Exersize_2020_1 : Exersize
     {
         private static string[] data;
 
-        public static void ParseInput(string input)
+        public Exersize_2020_1(byte part) : base("2020", "1", part)
+        {
+            ParseInput();
+        }
+
+        private void ParseInput()
         {
             data = input.Split('\n');
         }
 
-        public static string Part_1()
+        override protected string Part_1()
         {
             foreach(string d in data)
             {
@@ -23,6 +28,11 @@ namespace AdventOfCode
                 return (num * int.Parse(find)).ToString();
             }
 
+            return "";
+        }
+
+        override protected string Part_2()
+        {
             return "";
         }
     }

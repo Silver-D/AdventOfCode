@@ -6,36 +6,34 @@ using System.Threading.Tasks;
 
 namespace AdventOfCode
 {
-    static class Exersize
+    abstract class Exersize
     {
-        private static string input;
-        private static Type exersizeClass;
+        public string    year;
+        public string    day;
+        public byte      part;
+        protected string input;
 
-        static Exersize()
+        public Exersize(string year, string day, byte part)
         {
-            input = "";
-            exersizeClass = null;
+            this.year = year;
+            this.day  = day;
+            this.part = part;
+            input     = GetInput(year, day);
         }
 
-        public static void SetExersize(string year, string day)
+        public string Run()
         {
-            input = GetInput(year, day);
+            if (part == 1)
+            return Part_1();
 
-            if (input.Length == 0)
-            return;
+            if (part == 2)
+            return Part_2();
 
-            exersizeClass = Type.GetType("AdventOfCode.Exersize_" + year + "_" + day);
-
-            exersizeClass.GetMethod("ParseInput").Invoke(null, new object[] { input });
-        }
-
-        public static string Run(int part)
-        {
-            if (input.Length == 0)
             return "";
-
-            return exersizeClass.GetMethod("Part_" + part).Invoke(null, new object[] { }).ToString();
         }
+
+        abstract protected string Part_1();
+        abstract protected string Part_2();
 
         private static string GetInput(string year, string day)
         {

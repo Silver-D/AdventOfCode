@@ -9,14 +9,11 @@ namespace AdventOfCode
 
         static void Main()
         {
-            string year = "2020";
-            string day  = "1";
-            byte   part = 1;
+            Exersize_2020_1 exersize = new Exersize_2020_1(part: 1);
 
-            Exersize.SetExersize(year, day);
+            string answer = exersize.Run();
 
-            string problem = year + "-" + day + " part " + part;
-            string answer  = Exersize.Run(part);
+            string problem = exersize.year + "-" + exersize.day + " part " + exersize.part;
 
             if (answer.Length > 0)
             Console.WriteLine("Your answer to " + problem + " is: " + answer);
