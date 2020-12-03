@@ -33,6 +33,24 @@ namespace AdventOfCode
 
         override protected string Part_2()
         {
+            int[] numbers = Array.ConvertAll(data, item => int.Parse(item));
+            int   needed  = 2020;
+
+            for (int a = 0; a < numbers.Length; a++)
+            {
+                for (int b = a; b < numbers.Length; b++)
+                {
+                    if (numbers[a] + numbers[b] > needed)
+                    continue;
+
+                    for (int c = b; c < numbers.Length; c++)
+                    {
+                        if (numbers[a] + numbers[b] + numbers[c] == needed)
+                        return (numbers[a] * numbers[b] * numbers[c]).ToString();
+                    }
+                }
+            }
+
             return "";
         }
     }

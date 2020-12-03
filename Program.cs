@@ -9,7 +9,7 @@ namespace AdventOfCode
 
         static void Main()
         {
-            Exersize_2020_1 exersize = new Exersize_2020_1(part: 1);
+            Exersize_2020_1 exersize = new Exersize_2020_1(part: 2);
 
             string answer = exersize.Run();
 

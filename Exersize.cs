@@ -18,7 +18,7 @@ namespace AdventOfCode
             this.year = year;
             this.day  = day;
             this.part = part;
-            input     = GetInput(year, day);
+            input     = GetInput(year, day).Trim();
         }
 
         public string Run()
