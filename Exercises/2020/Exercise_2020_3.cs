@@ -9,10 +9,10 @@ namespace AdventOfCode
     {
         private bool[,] data;
 
-        private int max_x = 0;
-        private int max_y = 0;
-        private int step_x = 3;
-        private int step_y = 1;
+        private int max_x  = 0;
+        private int max_y  = 0;
+        private int step_x = 0;
+        private int step_y = 0;
 
         public Exercise_2020_3(byte part) : base("2020", "3", part)
         {
@@ -46,6 +46,12 @@ namespace AdventOfCode
             int trees = 0;
             int x     = 0;
 
+            if (step_x == 0)
+            step_x = 3;
+
+            if (step_y == 0)
+            step_y = 1;
+
             for (int y = step_y; y < max_y; y += step_y)
             {
                 x += step_x;
@@ -76,7 +82,7 @@ namespace AdventOfCode
 
             int[] trees = new int[steps.Count()];
 
-            for (int i = 0; i < steps.Count(); i++)
+            for (int i = 0; i < trees.Length; i++)
             {
                 step_x = steps[i][0];
                 step_y = steps[i][1];
