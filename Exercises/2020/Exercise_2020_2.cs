@@ -7,6 +7,11 @@ namespace AdventOfCode
 {
     class Exercise_2020_2 : Exercise
     {
+        public Exercise_2020_2(byte part) : base("2020", "2", part)
+        {
+            ParseInput();
+        }
+
         private struct Line
         {
             public int    lnum;
@@ -16,11 +21,6 @@ namespace AdventOfCode
         }
 
         private List<Line> data = new List<Line>();
-
-        public Exercise_2020_2(byte part) : base("2020", "2", part)
-        {
-            ParseInput();
-        }
 
         private void ParseInput()
         {
