@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace AdventOfCode
@@ -25,7 +23,7 @@ namespace AdventOfCode
 
             while ((line = sr.ReadLine()) != null)
             {
-              //  Console.WriteLine(line);
+                Console.WriteLine(line);
 
                 if (line.Length == 0)
                 {
