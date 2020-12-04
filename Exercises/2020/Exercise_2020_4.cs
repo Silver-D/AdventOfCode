@@ -158,6 +158,9 @@ namespace AdventOfCode
 
                     else if (f == "pid" && (value.Length != 9 || !int.TryParse(value, out int blank)))
                     verified = false;
+
+                    if (!verified)
+                    break;
                 }
 
                 if (verified)
