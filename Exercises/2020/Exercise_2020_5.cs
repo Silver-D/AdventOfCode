@@ -21,9 +21,9 @@ namespace AdventOfCode
             int HalfRange(bool lowerHalf)
             {
                 if (lowerHalf)
-                return (upper = (int)Math.Floor((lower + upper) / 2f));
+                return (upper = (lower + upper - 1) / 2);
 
-                return (lower = (int)Math.Ceiling((lower + upper) / 2f));
+                return (lower = (lower + upper + 1) / 2);
             }
 
             string[] lines = input.Split('\n');
