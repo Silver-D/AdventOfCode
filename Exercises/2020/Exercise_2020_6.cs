@@ -55,7 +55,7 @@ namespace AdventOfCode
                 }
 
                 if (part == 2 && people > 1)
-                answers = answers.Intersect(line.ToCharArray()).ToList();
+                answers = answers.Intersect(line).ToList();
             }
 
             Console.WriteLine("\n" + answers.Count());
