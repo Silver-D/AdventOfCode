@@ -21,7 +21,7 @@ namespace AdventOfCode
             int HalfRange(bool lowerHalf)
             {
                 if (lowerHalf)
-                return (upper = (lower + upper - 1) / 2);
+                return (upper = (lower + upper) / 2);
 
                 return (lower = (lower + upper + 1) / 2);
             }
