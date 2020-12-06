@@ -71,10 +71,10 @@ namespace AdventOfCode
 
             foreach(int seat in seats)
             {
-                int find = seat + 2;
+                int find = seat + 1;
 
-                if (seats.Contains(find) && !seats.Contains(find - 1))
-                return (find - 1).ToString();
+                if (seats.Contains(find + 1) && !seats.Contains(find))
+                return (find).ToString();
             }
 
             return "";
