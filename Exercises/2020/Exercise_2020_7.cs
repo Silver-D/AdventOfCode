@@ -51,7 +51,7 @@ namespace AdventOfCode
             readonly public string id;
 
             readonly Dictionary<Bag, int>  holds;
-            readonly Dictionary<Bag, bool> holdsEver;
+            readonly Dictionary<Bag, bool> holdsCache;
 
             class BagEqualityComparer : IEqualityComparer<Bag>
             {
@@ -60,48 +60,47 @@ namespace AdventOfCode
                 public bool Equals(Bag bag1, Bag bag2) { return bag1.id == bag2.id; }
             }
 
+            readonly static BagEqualityComparer dictKeyComparer = new BagEqualityComparer();
+
             public Bag(string id)
             {
                 this.id = id;
 
-                holds     = new Dictionary<Bag, int>(new BagEqualityComparer());
-                holdsEver = new Dictionary<Bag, bool>(new BagEqualityComparer());
+                holds      = new Dictionary<Bag, int>(dictKeyComparer);
+                holdsCache = new Dictionary<Bag, bool>(dictKeyComparer);
 
                 BagCollection.AddBag(this);
             }
 
-            public void AddContents(string id, int count)
+            public void AddContents(Bag bag, int count)
             {
-                Bag bag = BagCollection.ById(id);
-
                 if (holds.ContainsKey(bag))
                 holds[bag] += count;
 
                 else
                 {
                     holds.Add(bag, count);
-                    holdsEver.Add(bag, true);
+                    holdsCache.Add(bag, true);
                 }
             }
 
             public bool CanHold(Bag bag)
             {
-                if (holdsEver.ContainsKey(bag))
-                return holdsEver[bag];
+                if (holdsCache.ContainsKey(bag))
+                return holdsCache[bag];
 
                 foreach(Bag enclosed in holds.Keys)
                 {
                     if (enclosed.CanHold(bag))
                     {
-                        if (!enclosed.holdsEver.ContainsKey(bag))
-                        enclosed.holdsEver.Add(bag, true);
+                        holdsCache.Add(bag, true);
 
                         return true;
                     }
 
                 }
 
-                holdsEver.Add(bag, false);
+                holdsCache.Add(bag, false);
 
                 return false;
             }
@@ -112,9 +111,10 @@ namespace AdventOfCode
 
                 foreach(KeyValuePair<Bag, int> kvp in holds)
                 {
-                    count += kvp.Value * mult;
+                    int num = kvp.Value * mult;
 
-                    count += kvp.Key.GetTotalBagCount(kvp.Value * mult);
+                    count += num;
+                    count += kvp.Key.GetTotalBagCount(num);
                 }
 
                 return count;
@@ -161,7 +161,7 @@ namespace AdventOfCode
                         {
                             Console.WriteLine("Adding " + count + " " + bag_id);
 
-                            bag.AddContents(bag_id, count);
+                            bag.AddContents(BagCollection.ById(bag_id), count);
 
                             bag_id = "";
                         }
@@ -176,12 +176,12 @@ namespace AdventOfCode
 
         protected override string Part_1()
         {
-            Bag findBag = BagCollection.ById("shinygold");
-            int count   = 0;
+            Bag myBag = BagCollection.ById("shinygold");
+            int count = 0;
 
             foreach(Bag bag in BagCollection.Bags)
             {
-                if (bag.CanHold(findBag))
+                if (bag.CanHold(myBag))
                 count++;
             }
 
