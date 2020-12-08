@@ -176,8 +176,11 @@ namespace AdventOfCode
             Bag myBag = BagCollection.ById("shinygold");
             int count = 0;
 
-            foreach(Bag bag in BagCollection.Bags.Where(e => (e.id != myBag.id)))
+            foreach(Bag bag in BagCollection.Bags)
             {
+                if (bag.id == myBag.id)
+                continue;
+
                 if (bag.CanHold(myBag))
                 count++;
             }
