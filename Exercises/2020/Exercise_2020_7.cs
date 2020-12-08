@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace AdventOfCode
@@ -11,21 +12,46 @@ namespace AdventOfCode
             ParseInput();
         }
 
+        static class BagCollection
+        {
+            readonly static Dictionary<string, Bag> entries;
+
+            public static List<Bag> Bags => entries.Values.ToList();
+
+            static BagCollection()
+            {
+                entries = new Dictionary<string, Bag>();
+            }
+
+            public static Bag ById(string id)
+            {
+                if (!entries.TryGetValue(id, out Bag bag))
+                bag = new Bag(id);
+
+                return bag;
+            }
+
+            public static void AddBag(Bag bag)
+            {
+                try
+                {
+                    entries.Add(bag.id, bag);
+                }
+                catch(ArgumentException)
+                {
+                    Console.WriteLine("A Bag with id " + bag.id + " already exists in BagCollection or not of valid id");
+
+                    throw new ArgumentException();
+                }
+            }
+        }
+
         class Bag
         {
-            readonly string id;
+            readonly public string id;
 
             readonly Dictionary<Bag, int>  holds;
-            readonly Dictionary<Bag, bool> holdsEventually;
-
-            public Bag(string id)
-            {
-                this.id = id;
-
-                this.holds = new Dictionary<Bag, int>(new BagEqualityComparer());
-
-                this.holdsEventually = new Dictionary<Bag, bool>(new BagEqualityComparer());
-            }
+            readonly Dictionary<Bag, bool> holdsEver;
 
             class BagEqualityComparer : IEqualityComparer<Bag>
             {
@@ -34,7 +60,17 @@ namespace AdventOfCode
                 public bool Equals(Bag bag1, Bag bag2) { return bag1.id == bag2.id; }
             }
 
-            public void AddBag(string id, int count)
+            public Bag(string id)
+            {
+                this.id = id;
+
+                holds     = new Dictionary<Bag, int>(new BagEqualityComparer());
+                holdsEver = new Dictionary<Bag, bool>(new BagEqualityComparer());
+
+                BagCollection.AddBag(this);
+            }
+
+            public void AddContents(string id, int count)
             {
                 Bag bag = BagCollection.ById(id);
 
@@ -42,35 +78,30 @@ namespace AdventOfCode
                 holds[bag] += count;
 
                 else
-                holds.Add(bag, count);
-            }
-
-            bool CanHoldDirectly(Bag bag)
-            {
-                return holds.ContainsKey(bag);
+                {
+                    holds.Add(bag, count);
+                    holdsEver.Add(bag, true);
+                }
             }
 
             public bool CanHold(Bag bag)
             {
-                if (CanHoldDirectly(bag))
-                return true;
-
-                if (holdsEventually.ContainsKey(bag))
-                return holdsEventually[bag];
+                if (holdsEver.ContainsKey(bag))
+                return holdsEver[bag];
 
                 foreach(Bag enclosed in holds.Keys)
                 {
                     if (enclosed.CanHold(bag))
                     {
-                        if (!enclosed.holdsEventually.ContainsKey(bag))
-                        enclosed.holdsEventually.Add(bag, true);
+                        if (!enclosed.holdsEver.ContainsKey(bag))
+                        enclosed.holdsEver.Add(bag, true);
 
                         return true;
                     }
 
                 }
 
-                holdsEventually.Add(bag, false);
+                holdsEver.Add(bag, false);
 
                 return false;
             }
@@ -90,28 +121,6 @@ namespace AdventOfCode
             }
         }
 
-        static class BagCollection
-        {
-            readonly public static Dictionary<string, Bag> collection;
-
-            static BagCollection()
-            {
-                collection = new Dictionary<string, Bag>();
-            }
-
-            public static Bag ById(string id)
-            {
-                if (!collection.TryGetValue(id, out Bag bag))
-                {
-                    bag = new Bag(id);
-
-                    collection.Add(id, bag);
-                }
-
-                return bag;
-            }
-        }
-
         void ParseInput()
         {
             StringReader sr = new StringReader(input);
@@ -123,7 +132,7 @@ namespace AdventOfCode
                 string[] words = line.Split(' ');
 
                 string bag_id = "";
-                int    number = 0;
+                int    count  = 0;
                 Bag    bag    = null;
 
                 foreach(string w in words)
@@ -139,20 +148,20 @@ namespace AdventOfCode
                         continue;
                     }
 
-                    if (int.TryParse(w, out int count))
+                    if (int.TryParse(w, out int number))
                     {
-                        number = count;
+                        count = number;
 
                         continue;
                     }
 
                     if (w.Contains("bag"))
                     {
-                        if (number > 0)
+                        if (count > 0)
                         {
-                            Console.WriteLine("Adding " + number + " " + bag_id);
+                            Console.WriteLine("Adding " + count + " " + bag_id);
 
-                            bag.AddBag(bag_id, number);
+                            bag.AddContents(bag_id, count);
 
                             bag_id = "";
                         }
@@ -167,12 +176,12 @@ namespace AdventOfCode
 
         protected override string Part_1()
         {
-            Bag find_bag = BagCollection.ById("shinygold");
-            int count    = 0;
+            Bag findBag = BagCollection.ById("shinygold");
+            int count   = 0;
 
-            foreach(Bag bag in BagCollection.collection.Values)
+            foreach(Bag bag in BagCollection.Bags)
             {
-                if (bag.CanHold(find_bag))
+                if (bag.CanHold(findBag))
                 count++;
             }
 
