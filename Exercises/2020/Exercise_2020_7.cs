@@ -75,13 +75,10 @@ namespace AdventOfCode
             public void AddContents(Bag bag, int count)
             {
                 if (holds.ContainsKey(bag))
-                holds[bag] += count;
+                return;
 
-                else
-                {
-                    holds.Add(bag, count);
-                    holdsCache.Add(bag, true);
-                }
+                holds.Add(bag, count);
+                holdsCache.Add(bag, true);
             }
 
             public bool CanHold(Bag bag)
@@ -179,7 +176,7 @@ namespace AdventOfCode
             Bag myBag = BagCollection.ById("shinygold");
             int count = 0;
 
-            foreach(Bag bag in BagCollection.Bags)
+            foreach(Bag bag in BagCollection.Bags.Where(e => (e.id != myBag.id)))
             {
                 if (bag.CanHold(myBag))
                 count++;
